@@ -1,0 +1,75 @@
+﻿{
+  "info": {
+    "name": "JSONPlaceholder API Tests",
+    "description": "Suite de pruebas API para portafolio QA — GET/POST + assertions",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET Posts — listado",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Es un array', function () { pm.expect(pm.response.json()).to.be.an('array'); });",
+              "pm.test('Tiene al menos 1 post', function () { pm.expect(pm.response.json().length).to.be.above(0); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "https://jsonplaceholder.typicode.com/posts"
+      }
+    },
+    {
+      "name": "GET Post by id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "const data = pm.response.json();",
+              "pm.test('id = 1', function () { pm.expect(data.id).to.eql(1); });",
+              "pm.test('tiene title y body', function () { pm.expect(data).to.have.property('title'); pm.expect(data).to.have.property('body'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "https://jsonplaceholder.typicode.com/posts/1"
+      }
+    },
+    {
+      "name": "POST Create post",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 201', function () { pm.response.to.have.status(201); });",
+              "const data = pm.response.json();",
+              "pm.test('Echo del title', function () { pm.expect(data.title).to.eql('QA automation demo'); });",
+              "pm.test('Devuelve id', function () { pm.expect(data).to.have.property('id'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"QA automation demo\",\n  \"body\": \"Creado desde colección Postman de portafolio\",\n  \"userId\": 1\n}"
+        },
+        "url": "https://jsonplaceholder.typicode.com/posts"
+      }
+    }
+  ]
+}
